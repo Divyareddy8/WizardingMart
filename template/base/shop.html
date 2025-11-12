@@ -2,24 +2,85 @@
 {% load static %}
 
 {% block content %}
+{# shop.html - inside the for loop for products #}
+<form id="csrf-form" style="display:none;">{% csrf_token %}</form>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    <!-- add jQuery library -->
-  <script src="https://www.w3schools.com/lib/w3.js"></script>  
 {% for product in products %}
-<figure class="snip">         
-    <h4>{{product.name}}</h4>
-    <div class="image">
-      <img src="{{product.productImg}}" />
+<figure class="snip">
+  <h4>{{ product.name }}</h4>
+  <div class="image">
+    <img src="{{ product.productImg }}" alt="{{ product.name }}">
+  </div>
+  <figcaption>
+    <p>{{ product.description }}</p>
+    <div class="price">
+      <s>${{ product.mrp }}</s>
+      <div class="real">${{ product.price }}</div>
     </div>
-    <figcaption>
-      <p>{{product.description}}</p>    
-      <div class="price">
-        <s>${{product.mrp}}</s><div class="real" data-price="19.00">${{product.price}}</div>
-      </div>
-    </figcaption>
-    <a class="add-to-cart" href="{% url 'addItem' product.id%}">Add to Cart</a>
-  </figure>
-  {% endfor%}
+  </figcaption>
+
+  {# Use the url tag to generate exact path and store it in data-url #}
+  <button class="add-to-cart-btn" data-url="{% url 'addItem' product.id %}">
+    Add to Cart
+  </button>
+</figure>
+{% endfor %}
+
+{# single JS block at bottom of page (remove any other add-to-cart scripts) #}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const csrftokenElm = document.querySelector('[name=csrfmiddlewaretoken]');
+  const csrftoken = csrftokenElm ? csrftokenElm.value : null;
+  if (!csrftoken) console.warn('CSRF token not found in page.');
+
+  document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const url = btn.dataset.url; // exact Django URL
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+          },
+        });
+
+        if (!res.ok) {
+          // show meaningful console + optional alert
+          const text = await res.text().catch(()=> '');
+          console.error('Add item failed', res.status, text);
+          alert('Could not add item. See console for details.');
+          return;
+        }
+
+        const data = await res.json();
+        if (data.message) {
+          alert(data.message);
+          // update navbar count if present
+          const countEl = document.querySelector('#cart-count');
+          if (countEl && typeof data.total_quantity !== 'undefined') {
+            countEl.textContent = data.total_quantity;
+          }
+          // optionally update cart preview UI (call a function)
+        } else if (data.error) {
+          alert(data.error);
+        }
+      } catch (err) {
+        console.error('Network error adding item', err);
+        alert('Network error. See console.');
+      }
+    });
+  });
+});
+</script>
+
+
+
+
+
   <!-- --------------------Check out ---------------- -->
 {% include 'base/cart.html' %}
           <!-- -----------------Bill------------- -->
@@ -507,3 +568,27 @@ figure.snip button:hover{
 </style>
 
 {% endblock content %}
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+</script>
+
+
+
+
+

@@ -1,29 +1,101 @@
 {% load static %}
+
 {% if request.user.is_authenticated %}
 <div class="container">
-    <div class="table">
-    {% if items.count == 0 %}   
-    <div style="margin-top: 100px; font-size: 1.5em;">Your cart is empty!</div>
-<!--     <img src="https://2.bp.blogspot.com/-VYC7hvhUz4U/WdcPLAr86jI/AAAAAAAABuA/G3y27JwIL_0S5OsVIp6maXjsdgLRumaTwCLcBGAs/s1600/emptycart.png" style="width:200px;"/> -->
+  <div class="table">
+    {% if items.count == 0 %}
+      <div style="margin-top: 100px; font-size: 1.5em;">Your cart is empty!</div>
     {% else %}
-    <h3>Shopping Cart</h3>
-    <br>
-    {% for item in items %}
-        <div class="col1-name">{{item.product.name}} x {{item.quantity}}</div>
-        <div class="col2-price">${{item.product.price}}</div>
-        {% if page != 'checkout' %}
-        <div class="del"><a href="{% url 'deleteItem' item.id%}"><img src="{% static 'images/remove.png' %}"></a></div>
-        {% endif %}
-    {% endfor %}
-    {% endif %}
-    </div>
-    <div class="cart-bottom">
-        <div class="total" style="margin-top: 20px;">
-            <div class="total-text">Total Amount:</div>
-            <div class="total-amount">${{price}}</div>
+      <h3>Shopping Cart</h3>
+      <br>
+
+      <!-- ✅ Added hidden form to access CSRF token -->
+      <form id="csrf-form">{% csrf_token %}</form>
+
+      {% for item in items %}
+        <div class="cart-item" id="item-{{ item.id }}">
+          <div class="col1-name">{{ item.product.name }} x {{ item.quantity }}</div>
+          <div class="col2-price">${{ item.product.price }}</div>
+
+          {% if page != 'checkout' %}
+            <div class="del">
+              <!-- ✅ Added class for JS targeting -->
+              <a href="{% url 'deleteItem' item.id %}" class="delete-item">
+                <img src="{% static 'images/remove.png' %}" alt="Remove">
+              </a>
+            </div>
+          {% endif %}
         </div>
-        <div class="checkout" onclick="document.getElementById('id01').style.display='block'">Check out</div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <div class="cart-bottom">
+    <div class="total" style="margin-top: 20px;">
+      <div class="total-text">Total Amount:</div>
+      <div class="total-amount" id="total-amount">${{ price }}</div>
     </div>
+    <div class="checkout" onclick="document.getElementById('id01').style.display='block'">Check out</div>
+  </div>
 </div>
 {% endif %}
-  
+
+
+<form id="csrf-form" style="display:none;">{% csrf_token %}</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const csrftokenElm = document.querySelector('[name=csrfmiddlewaretoken]');
+  const csrftoken = csrftokenElm ? csrftokenElm.value : null;
+  if (!csrftoken) console.warn('CSRF token not found.');
+
+  document.querySelectorAll('.delete-item').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const url = btn.dataset.url || btn.getAttribute('href');
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'X-CSRFToken': csrftoken,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+          }
+        });
+
+        if (!res.ok) {
+          console.error('Delete failed', res.status);
+          alert('Could not remove item. See console.');
+          return;
+        }
+
+        const data = await res.json();
+        if (data.message) {
+          // remove the item element from DOM
+          const el = btn.closest('.cart-item');
+          if (el) el.remove();
+
+          // update totals
+          const totalAmt = document.querySelector('#total-amount');
+          if (totalAmt && typeof data.total_price !== 'undefined') {
+            totalAmt.textContent = `$${data.total_price}`;
+          }
+
+          const countEl = document.querySelector('#cart-count');
+          if (countEl && typeof data.total_quantity !== 'undefined') {
+            countEl.textContent = data.total_quantity;
+          }
+
+          alert(data.message);
+        } else if (data.error) {
+          alert(data.error);
+        }
+      } catch (err) {
+        console.error('Network error deleting item', err);
+        alert('Network error. See console.');
+      }
+    });
+  });
+});
+</script>

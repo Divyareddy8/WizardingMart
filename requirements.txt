@@ -1,0 +1,8 @@
+asgiref==3.8.1
+Django==5.0.3
+gunicorn==23.0.0
+packaging==24.1
+pillow==11.0.0          # ✅ Updated — compatible with Python 3.13
+sqlparse==0.5.1         # ✅ Minor bump — supports newer Python versions
+typing_extensions==4.12.2
+tzdata==2024.2

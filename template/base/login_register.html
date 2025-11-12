@@ -3,6 +3,14 @@
 {% block content %}
 
 <div class="wrapper">
+  {% if messages %}
+  <div class="messages" style="color: red; margin: 10px;">
+    {% for message in messages %}
+      <p>{{ message }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+
   {% if page == 'login' %}
   <div class="form-box login">
     <h2 style="color:rgba(183,231,190,255)">Login</h2>
