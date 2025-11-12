@@ -1,13 +1,5 @@
 # Harry Potter Store
 
-## Track - Web Development
-The contributors and contribution to the Harry Potter Store are as follows:
-
-+ Divya: Frontend
-+ Bharat: Frontend
-+ Priyanshu: Frontend and Backend
-
-## Problem Statement
 Creating a fully-functional e-commerce website
 
 ## Goal
