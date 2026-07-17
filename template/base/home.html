@@ -224,6 +224,28 @@
         }
       }
 
+      @media (max-width: 900px) {
+        #text {
+          font-size: 3em;
+        }
+        header h1 {
+          font-size: 2em;
+        }
+        .hero {
+          height: 60vh;
+        }
+      }
+
+      @media (max-width: 480px) {
+        #text {
+          font-size: 2em;
+          padding-left: 10px;
+        }
+        .hero.active h1 {
+          font-size: 1.1rem;
+        }
+      }
+
 </style>
 <script>
 let text = document.getElementById('text');

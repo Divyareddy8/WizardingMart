@@ -90,3 +90,32 @@ body{
   background-size: cover;
   background-position: center;
 }
+
+/* ---------- Responsive header ---------- */
+@media (max-width: 900px) {
+  header {
+    flex-wrap: wrap;
+    row-gap: 10px;
+    padding: 10px 16px;
+  }
+  header ul {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  header ul li a {
+    padding-right: 24px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  header .logo {
+    font-size: 1.4em;
+  }
+  header ul li a {
+    padding-right: 14px;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+}

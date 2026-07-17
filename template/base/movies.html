@@ -94,10 +94,13 @@ body{
     left: 50%;
     transform: translate(-50%, -50%);
     width: 1000px;
+    max-width: 92vw;
     height: 600px;
+    max-height: 75vh;
     background: #f5f5f5;
     border-radius: 20px;
     box-shadow: 0 10px 30px #dbdbdb;
+    overflow: hidden;
 }
 
 .container .slide .item{
@@ -229,6 +232,40 @@ body{
 .button button:hover{
     background: #ababab;
     color: #000;
+}
+
+@media (max-width: 700px) {
+  .item .content {
+    left: 20px;
+    width: 85%;
+  }
+  .content .name {
+    font-size: 22px;
+  }
+  .content .des {
+    font-size: 14px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+  }
+  .content button {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 420px) {
+  .container {
+    max-height: 65vh;
+  }
+  .content .name {
+    font-size: 18px;
+  }
+  .content .des {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
 }
 </style>
 <script>

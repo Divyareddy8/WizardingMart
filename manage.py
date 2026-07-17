@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
-
-import sys
 import os
-from pathlib import Path
+import sys
 
 
 def main():

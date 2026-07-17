@@ -3,14 +3,6 @@
 {% block content %}
 
 <div class="wrapper">
-  {% if messages %}
-  <div class="messages" style="color: red; margin: 10px;">
-    {% for message in messages %}
-      <p>{{ message }}</p>
-    {% endfor %}
-  </div>
-{% endif %}
-
   {% if page == 'login' %}
   <div class="form-box login">
     <h2 style="color:rgba(183,231,190,255)">Login</h2>
@@ -74,10 +66,10 @@
   color: rgba(183,231,190,255);
 }
 .wrapper{   
-  margin-left: 150px;
-  margin-top: 50px;
+  margin: 50px auto 0 auto;
   position:relative;
   width:400px;
+  max-width: 90vw;
   height:500px;
   background: transparent;
   border:2px solid rgba(255,255,255,.5);
@@ -89,6 +81,20 @@
   display: flex;
   overflow:hidden;
   padding-left: 10px;
+}
+
+@media (max-width: 480px) {
+  .wrapper {
+    height: auto;
+    min-height: 460px;
+    margin-top: 30px;
+  }
+  .form-box {
+    padding: 25px;
+  }
+  .form-box h2 {
+    font-size: 1.6em;
+  }
 }
 .wrapper.form-box
 {

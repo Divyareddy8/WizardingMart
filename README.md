@@ -1,5 +1,13 @@
 # Harry Potter Store
 
+## Track - Web Development
+The contributors and contribution to the Harry Potter Store are as follows:
+
++ Divya: Frontend
++ Bharat: Frontend
++ Priyanshu: Frontend and Backend
+
+## Problem Statement
 Creating a fully-functional e-commerce website
 
 ## Goal
@@ -35,7 +43,7 @@ To run the Harry Potter Store locally, follow the steps mentioned below:
 7. Now run the virtual environment by entering "env\bin\activate".
 8. Now for final installation, we have to install the django by entering "python -m pip install django" command.
 9. Now you are set to run the Harry Potter Store on your local server. To start the server, enter "python manage.py runserver.
-10. The server should start running on your system. Head to "http://127.0.0.1:8000/" in your browser and I Solemnly Swear That I Am Up to No Good.
+10. The server should start running on your system. Head to "http://127.0.0.1:8000/" in your browser.
 
 ## Applications
 Our idea can be used to cater all the Haryy Potter fans, and different local brands can collaborate with us and we can ship the local Harry Potter goodies globally.
