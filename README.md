@@ -3,7 +3,7 @@
 ## Track - Web Development
 The contributors and contribution to the Harry Potter Store are as follows:
 
-+ Divya: Frontend
++ Divya: Frontend and hosting 
 + Bharat: Frontend
 + Priyanshu: Frontend and Backend
 
@@ -53,6 +53,4 @@ The addition of responsiveness can help us cater the mobile/tablet users. Apart 
 
 ## Project Demo
 Here is the link to the demo of our Harry Potter Store: [Demo](https://www.youtube.com/watch?v=ogBEOF4Il7I)
-"# Potter-Store" 
-"# Potter-Store" 
-"# Potter-Store" 
+Live at https://wizardingmart.onrender.com/
